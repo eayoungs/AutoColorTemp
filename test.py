@@ -25,5 +25,27 @@ def _temp_to_white(t):
     return (white[0] / 255.0, white[1] / 255.0, white[2] / 255.0)
 
 
-rgbTuple = _temp_to_white(1900.0)
+def adjust_white_point(self, white):
+        """Change the white point of the monitor to the specified value (tuple of 
+        RGB floats, 0-1.0)."""
+        # Set gamma ramp parameters.
+        redMin = c_float(0.0)
+        redMax = c_float(white[0])
+        redGamma = c_float(self.gamma[0])
+        greenMin = c_float(0.0)
+        greenMax = c_float(white[1])
+        greenGamma = c_float(self.gamma[1])
+        blueMin = c_float(0.0)
+        blueMax = c_float(white[2])
+        blueGamma = c_float(self.gamma[2])
+        # Update gamma ramp.
+        result = quartz.CGSetDisplayTransferByFormula(self.display,
+            redMin, redMax, redGamma,
+            greenMin, greenMax, greenGamma,
+            blueMin, blueMax, blueGamma)
+        if result != 0:
+            raise RuntimeError('Error calling CGSetDisplayTransferByFormula with error code: {0}'.format(result))
+
+
+rgbTuple = _temp_to_white(1900)
 print rgbTuple
