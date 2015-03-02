@@ -1,4 +1,5 @@
 import math
+from colormath.color_objects import xyYColor
 
 def _temp_to_white(t):
     """Convert color temperature to sRGB white point tuple."""
@@ -22,3 +23,7 @@ def _temp_to_white(t):
     white = xyYColor(xc, yc, 1.0).convert_to('rgb').get_value_tuple()
     # Return values normalized to 0-1.0 range.
     return (white[0] / 255.0, white[1] / 255.0, white[2] / 255.0)
+
+
+rgbTuple = _temp_to_white(1900.0)
+print rgbTuple
